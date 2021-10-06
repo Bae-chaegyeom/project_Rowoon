@@ -44,13 +44,6 @@ jobs:
           r-version: ${{ matrix.R }}
       - run: Rscript -e 'print("hello")'
 
-      - name: Start mysql service
-        run: |
-          sudo /lib/systemd/systemd-sysv-install enable mysql
-          sudo systemctl enable mysql.service
-          sudo systemctl start mysql.service
-          sudo systemctl status mysql.service
-
       - name: "[Custom block] test secrets"
         run: |
           echo "DB_HOST = '${{ secrets.DB_HOST }}'" >> .Renviron

@@ -1,10 +1,15 @@
-install.packages("RMySQL")
+install.packages("DBI")
+install.packages("pool")
+
 print("여기까지는 되나")
-library(RMySQL)
+library(DBI)
+library(pool)
+
 print("여기는?")
 
-con <- dbConnect(MySQL(),
-    user = Sys.getenv("DB_USER"),
+pool <- dbPool(
+    drv = RMySQL::MySQL(),
+    username = Sys.getenv("DB_USER"),
     password = Sys.getenv("DB_PW"),
     dbname = Sys.getenv("DB_NAME"),
     host = Sys.getenv("DB_HOST"),
