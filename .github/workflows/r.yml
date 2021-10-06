@@ -15,13 +15,16 @@ on:
     branches: [main]
 
 jobs:
-  query:
+  build:
     runs-on: ubuntu-latest
     env:
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_PW: ${{ secrets.DB_PW }}
       DB_USER: ${{ secrets.DB_USER }}
+    strategy:
+      matrix:
+        R: ["3.5.3", "3.6.1"]
 
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +36,7 @@ jobs:
           r-version: ${{ matrix.R }}
       - name: run query
         run: |
-          R query.r
+          Rscript -e 'print("이거 안되는건가?")'
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
