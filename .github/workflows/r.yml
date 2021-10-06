@@ -10,16 +10,18 @@ name: R
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build:
-    runs-on: macos-latest
-    strategy:
-      matrix:
-        r-version: [3.5, 3.6]
+  query:
+    runs-on: ubuntu-latest
+    env:
+      DB_HOST: ${{ secrets.DB_HOST }}
+      DB_NAME: ${{ secrets.DB_NAME }}
+      DB_PW: ${{ secrets.DB_PW }}
+      DB_USER: ${{ secrets.DB_USER }}
 
     steps:
       - uses: actions/checkout@v2
