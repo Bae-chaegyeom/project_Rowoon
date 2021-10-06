@@ -24,7 +24,7 @@ WHERE a.productName = 'AI 부트캠프 7기'
 GROUP BY as2.title "
 )
 
-test_query
+print(test_query)
 data <- fetch(db, n = -1)
 
 dbDisconnect(con)
