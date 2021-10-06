@@ -1,9 +1,9 @@
 
 install.packages("RMySQL")
-
+print(Sys.getenv())
 library(RMySQL)
 
-print(Sys.getenv())
+
 
 con <- dbConnect(MySQL(),
     user = Sys.getenv("DB_USERNAME"),
