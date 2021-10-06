@@ -24,7 +24,7 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}
     strategy:
       matrix:
-        R: ["3.5.3", "3.6.1"]
+        R: ["3.5.3"]
 
     steps:
       - uses: actions/checkout@v2
