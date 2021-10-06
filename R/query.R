@@ -4,8 +4,8 @@ library(RMySQL)
 print(Sys.getenv())
 
 con <- dbConnect(MySQL(),
-    user = Sys.getenv("DB_USER"),
-    password = Sys.getenv("DB_PW"),
+    user = Sys.getenv("DB_USERNAME"),
+    password = Sys.getenv("DB_PASSWORD"),
     dbname = Sys.getenv("DB_NAME"),
     host = Sys.getenv("DB_HOST"),
     port = 3306
