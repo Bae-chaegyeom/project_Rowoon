@@ -33,7 +33,7 @@ jobs:
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_PW: ${{ secrets.DB_PW }}
       DB_USER: ${{ secrets.DB_USER }}
-      
+
     strategy:
       matrix:
         R: ["3.5.3"]
@@ -58,5 +58,5 @@ jobs:
 
       - name: Generate data
         run: |
-          source("R/query.r")
+          source("R/query.R")
         shell: Rscript {0}
