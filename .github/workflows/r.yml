@@ -52,6 +52,8 @@ jobs:
           writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
         shell: Rscript {0}
 
+      - run: Rscript -e 'print(Sys.getenv())'
+
       - name: Generate data
         run: |
           source("R/query.R")
