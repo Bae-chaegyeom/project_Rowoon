@@ -34,6 +34,7 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
         with:
           r-version: ${{ matrix.R }}
+      - run: Rscript -e 'print("hello")'
       - name: run query
         run: |
           Rscript -e 'print("이거 안되는건가?")'
