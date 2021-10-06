@@ -8,7 +8,7 @@ con <- dbConnect(MySQL(),
     password = (Sys.getenv("DB_PW")),
     dbname = (Sys.getenv("DB_NAME")),
     host = (Sys.getenv("DB_HOST")),
-    port = "3306"
+    port = 3306
 )
 print("여기서  안되는건가?")
 dbSendQuery(con, 'set character set "utf8"')
