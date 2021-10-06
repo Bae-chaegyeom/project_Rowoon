@@ -1,5 +1,4 @@
-install.packages("DBI")
-install.packages("pool")
+
 install.packages("RMySQL")
 
 library(RMySQL)
@@ -18,7 +17,7 @@ con <- dbConnect(MySQL(),
 dbSendQuery(con, 'set character set "utf8"')
 
 test_query <- dbGetQuery(
-    pool,
+    con,
     "SELECT as2.title FROM application a
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON as2.id = ass.applicationStepId
@@ -28,6 +27,4 @@ GROUP BY as2.title "
 dbDisconnect(con)
 
 print(test_query)
-# data <- fetch(test_query, n = -1)
-
-
+data <- fetch(test_query, n = -1)
