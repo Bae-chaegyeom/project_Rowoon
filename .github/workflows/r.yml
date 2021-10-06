@@ -9,9 +9,8 @@
 name: R
 
 on:
+  workflow_dispatch:
   push:
-    branches: [main]
-  pull_request:
     branches: [main]
 
 jobs:
@@ -31,8 +30,8 @@ jobs:
       RSPM: ${{ matrix.config.rspm }}
       DB_HOST: ${{ secrets.DB_HOST }}
       DB_NAME: ${{ secrets.DB_NAME }}
-      DB_PW: ${{ secrets.DB_PW }}
-      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      DB_USERNAME: ${{ secrets.DB_USERNAME }}
 
     steps:
       - uses: actions/checkout@v2
@@ -42,14 +41,9 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
         with:
           r-version: ${{ matrix.R }}
-      - run: Rscript -e 'print("hello")'
 
-      - name: "[Custom block] test secrets"
-        run: |
-          echo "DB_HOST = '${{ secrets.DB_HOST }}'" >> .Renviron
-          echo "DB_NAME = '${{ secrets.DB_NAME }}'" >> .Renviron
-          echo "DB_PW = '${{ secrets.DB_PW }}'" >> .Renviron
-          echo "DB_USER = '${{ secrets.DB_USER }}'" >> .Renviron
+          DB_NAME: ${{ secrets.DB_NAME }}
+          
 
       - name: Query dependencies
         run: |

@@ -2,25 +2,20 @@ install.packages("DBI")
 install.packages("pool")
 install.packages("RMySQL")
 
-print("여기까지는 되나")
 library(RMySQL)
-library(DBI)
-library(pool)
 
-print("여기는?")
+print(Sys.getenv())
 
-pool <- dbPool(
-    drv = RMySQL::MySQL(),
-    username = Sys.getenv("DB_USER"),
-    password = Sys.getenv("DB_PW"),
+con <- dbConnect(MySQL(),
+    user = Sys.getenv("DB_USERNAME"),
+    password = Sys.getenv("DB_PASSWORD"),
     dbname = Sys.getenv("DB_NAME"),
     host = Sys.getenv("DB_HOST"),
     port = 3306
 )
-print("여기서  안되는건가?")
-dbSendQuery(pool, 'set character set "utf8"')
 
-# db<-dbSendQuery(con,SQL query)
+
+dbSendQuery(con, 'set character set "utf8"')
 
 test_query <- dbGetQuery(
     pool,
@@ -30,8 +25,9 @@ JOIN application_step as2 ON as2.id = ass.applicationStepId
 WHERE a.productName = 'AI 부트캠프 7기'
 GROUP BY as2.title "
 )
+dbDisconnect(con)
 
 print(test_query)
-data <- fetch(db, n = -1)
+# data <- fetch(test_query, n = -1)
 
-dbDisconnect(pool)
+
