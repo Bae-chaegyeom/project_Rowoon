@@ -36,8 +36,7 @@ jobs:
           r-version: ${{ matrix.R }}
       - run: Rscript -e 'print("hello")'
       - name: run query
-        run: |
-          Rscript -e 'print("이거 안되는건가?")'
+        run: Rscript -e 'print("이거 안되는건가?")'
         shell: Rscript {0}
       - name: Check
         run: rcmdcheck::rcmdcheck(args = "--no-manual", error_on = "error")
