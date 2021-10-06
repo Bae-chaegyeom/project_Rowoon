@@ -43,6 +43,12 @@ jobs:
         with:
           r-version: ${{ matrix.R }}
       - run: Rscript -e 'print("hello")'
+      - name: "[Custom block] test secrets"
+        run: |
+          echo "DB_HOST = '${{ secrets.DB_HOST }}'" >> .Renviron
+          echo "DB_NAME = '${{ secrets.DB_NAME }}'" >> .Renviron
+          echo "DB_PW = '${{ secrets.DB_PW }}'" >> .Renviron
+          echo "DB_USER = '${{ secrets.DB_USER }}'" >> .Renviron
 
       - name: Query dependencies
         run: |
