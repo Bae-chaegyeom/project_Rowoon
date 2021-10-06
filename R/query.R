@@ -5,8 +5,7 @@
 
 # DB_NAME <- 
 
-print(Sys.getenv("DB_NAME"))
-print(Sys.getenv(DB_NAME))
+print(Sys.getenv())
 
 #con <- dbConnect(MySQL(),
 #    user = Sys.getenv("DB_USER"),
