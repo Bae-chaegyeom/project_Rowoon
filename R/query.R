@@ -3,7 +3,7 @@ print("여기까지는 되나")
 library(RMySQL)
 print("여기는?")
 
-con <- dbConnect(MySQL(), user = ${{ secrets.DB_USER}}, password = ${{ secrets.DB_PW}}, dbname = ${{ secrets.DB_NAME}}, host = ${{ secrets.DB_HOST}})
+con <- dbConnect(MySQL(), user = `${{ secrets.DB_USER}}`, password = `${{ secrets.DB_PW}}`, dbname = `${{ secrets.DB_NAME}}`, host = `${{ secrets.DB_HOST}}`)
 print("여기서  안되는건가?")
 dbSendQuery(con, 'set character set "utf8"')
 
