@@ -1,28 +1,22 @@
 install.packages("RMySQL")
-install.packages("DBI")
-install.packages("pool")
 print("여기까지는 되나")
 library(RMySQL)
-library(DBI)
-library(pool)
 print("여기는?")
 
-pool <- dbPool(
-    drv = RMySQL::MySQL(),
-    username = Sys.getenv("DB_USER"),
+con <- dbConnect(MySQL(),
+    user = Sys.getenv("DB_USER"),
     password = Sys.getenv("DB_PW"),
     dbname = Sys.getenv("DB_NAME"),
     host = Sys.getenv("DB_HOST"),
-    port = 3306,
-    unix.sock = "/var/run/mysqld/mysqld.sock"
+    port = 3306
 )
 print("여기서  안되는건가?")
-dbSendQuery(pool, 'set character set "utf8"')
+dbSendQuery(con, 'set character set "utf8"')
 
 # db<-dbSendQuery(con,SQL query)
 
 test_query <- dbGetQuery(
-    pool,
+    con,
     "SELECT as2.title FROM application a
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON as2.id = ass.applicationStepId
