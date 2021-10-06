@@ -41,8 +41,10 @@ jobs:
           ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
         with:
           r-version: ${{ matrix.R }}
+
           DB_NAME: ${{ secrets.DB_NAME }}
           
+
       - name: Query dependencies
         run: |
           install.packages('remotes')

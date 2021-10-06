@@ -1,4 +1,7 @@
+install.packages("DBI")
+install.packages("pool")
 install.packages("RMySQL")
+
 library(RMySQL)
 
 print(Sys.getenv())
@@ -11,10 +14,11 @@ con <- dbConnect(MySQL(),
     port = 3306
 )
 
+
 dbSendQuery(con, 'set character set "utf8"')
 
 test_query <- dbGetQuery(
-    con,
+    pool,
     "SELECT as2.title FROM application a
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON as2.id = ass.applicationStepId
