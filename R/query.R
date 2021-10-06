@@ -1,10 +1,12 @@
-install.packages("RMySQL")
-print("여기까지는 되나")
-library(RMySQL)
-print("여기는?")
+# install.packages("RMySQL")
+# print("여기까지는 되나")
+# library(RMySQL)
+# print("여기는?")
 
-DB_NAME <- Sys.getenv("DB_NAME")
-print(DB_NAME)
+# DB_NAME <- 
+
+print(Sys.getenv("DB_NAME"))
+print(Sys.getenv(DB_NAME))
 
 #con <- dbConnect(MySQL(),
 #    user = Sys.getenv("DB_USER"),
