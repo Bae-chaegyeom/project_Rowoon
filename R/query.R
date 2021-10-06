@@ -24,6 +24,6 @@ GROUP BY as2.title "
 dbDisconnect(con)
 
 print(test_query)
-data <- fetch(test_query, n = -1)
+# data <- fetch(test_query, n = -1)
 
 
