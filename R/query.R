@@ -1,4 +1,6 @@
 install.packages("RMySQL")
+install.packages("DBI")
+install.packages("pool")
 print("여기까지는 되나")
 library(RMySQL)
 library(DBI)
