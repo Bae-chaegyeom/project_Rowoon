@@ -30,6 +30,7 @@ jobs:
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
+      SLACK_UEL: ${{ secrets.SLACK_URL }}
 
     steps:
       - uses: actions/checkout@v2
