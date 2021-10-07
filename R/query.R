@@ -57,7 +57,7 @@ GROUP BY a.productName) AS plz"
 )
 dbDisconnect(con)
 
-nowTime <- Sys.time()
+nowTime <- Sys.time() + 32400
 startSub <- paste0(">*지원상황*\n>쿼리 기준시간 : ", nowTime, "\n")
 startSub
 print(test_query)
