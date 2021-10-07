@@ -40,9 +40,6 @@ jobs:
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - uses: r-lib/actions/setup-r-dependencies@v1
-        with:
-          extra-packages: rcmdcheck
       - name: Set up R ${{ matrix.r-version }}
         uses: r-lib/actions/setup-r@v1
         env:
