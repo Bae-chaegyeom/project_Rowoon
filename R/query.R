@@ -1,7 +1,7 @@
 install.packages("RMySQL")
-# install.packages("httr")
+install.packages("httr")
 library(RMySQL)
-# library(httr)
+library(httr)
 
 print(Sys.getenv())
 slack_url <- Sys.getenv("SLACK_URL")
@@ -62,11 +62,11 @@ startSub <- paste0(">*지원상황*\n>쿼리 기준시간 : ", nowTime, "\n")
 startSub
 print(test_query)
 
-# for (i in 1:nrow(test_query)) {
-#     pName <- test_query[i, ]$name
+for (i in 1:nrow(test_query)) {
+    pName <- test_query[i, ]$name
 
-#     msub <- paste0("\n>*", test_query[i, ]$name, "*", "\n>누적 지원 수 : ", test_query[i, ]$appStart, "명", "\n>누적 지원 완료 수 : ", test_query[i, ]$subCom, "명", "\n>D-Day : ", "D", test_query[i, ]$remainingTime, "일", "\n>최종 전환률 : ", round((test_query[i, ]$subCom / test_query[i, ]$appStart) * 100, 1), "%\n")
+    msub <- paste0("\n>*", test_query[i, ]$name, "*", "\n>누적 지원 수 : ", test_query[i, ]$appStart, "명", "\n>누적 지원 완료 수 : ", test_query[i, ]$subCom, "명", "\n>D-Day : ", "D", test_query[i, ]$remainingTime, "일", "\n>최종 전환률 : ", round((test_query[i, ]$subCom / test_query[i, ]$appStart) * 100, 1), "%\n")
 
-#     startSub <- paste0(startSub, msub)
-# }
-# r <- POST(slack_url, body = list(text = startSub), encode = "json")
+    startSub <- paste0(startSub, msub)
+}
+r <- POST(slack_url, body = list(text = startSub), encode = "json")
