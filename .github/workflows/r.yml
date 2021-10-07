@@ -13,7 +13,7 @@ on:
   push:
     branches: [main]
   schedule:
-    - cron: "0 30 17 ? * THU *"
+    - cron: "0 30 17 * THU *"
 
 jobs:
   generate-data:
