@@ -69,4 +69,7 @@ for (i in 1:nrow(test_query)) {
 
     startSub <- paste0(startSub, msub)
 }
+
+startSub <- paste0(startSub, "테스트를 위해 잠시 내립니다.")
+
 r <- POST(slack_url, body = list(text = startSub), encode = "json")

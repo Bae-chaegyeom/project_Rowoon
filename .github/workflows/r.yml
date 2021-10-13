@@ -9,8 +9,8 @@
 name: R
 
 on:
-  schedule:
-    - cron: "0 18 * * *"
+  # schedule:
+  #   - cron: "0 0 * * 1-5"
   workflow_dispatch:
   push:
     branches: [main]
