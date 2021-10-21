@@ -1,9 +1,7 @@
 install.packages("RMySQL")
-install.packages("httr")
 install.packages("slackr")
 install.packages("stringr")
 library(RMySQL)
-library(httr)
 library(slackr)
 library(stringr)
 
