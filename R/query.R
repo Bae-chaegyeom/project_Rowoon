@@ -59,7 +59,7 @@ AND p.name NOT LIKE '%copy%'"
 
 ### 메세지 시작 템플릿
 slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", nowTime, "\n\n")
-
+print("why channel not found?")
 slackr_msg(
     txt = slackStartMsg,
     channel = Sys.getenv("SLACK_CHANNEL"),
