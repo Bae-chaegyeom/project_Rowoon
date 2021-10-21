@@ -5,7 +5,6 @@ library(RMySQL)
 library(slackr)
 library(stringr)
 
-
 print(Sys.getenv())
 
 ## slackr 셋팅

@@ -33,6 +33,8 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}
       DB_USERNAME: ${{ secrets.DB_USERNAME }}
       SLACK_URL: ${{ secrets.SLACK_URL }}
+      SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
+      SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
 
     steps:
       - uses: actions/checkout@v2
