@@ -58,10 +58,11 @@ AND p.name NOT LIKE '%copy%'"
 )
 
 ### 메세지 시작 템플릿
+ch <- Sys.getenv("SLACK_CHANNEL")
 slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", nowTime, "\n\n")
 slackr_msg(
     txt = slackStartMsg,
-    channel = Sys.getenv("SLACK_CHANNEL"),
+    channel = ch,
     username = "춘식이",
     token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
@@ -254,7 +255,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = Sys.getenv("SLACK_CHANNEL"),
+        channel = ch,
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
