@@ -59,7 +59,7 @@ ch <- Sys.getenv("SLACK_CHANNEL")
 slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", nowTime, "\n\n")
 slackr_msg(
     txt = slackStartMsg,
-    channel = "U01JZG8BDK7",
+    channel = "adm_private_talk",
     username = "춘식이",
     token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
@@ -252,7 +252,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = "U01JZG8BDK7",
+        channel = "adm_private_talk",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -288,7 +288,7 @@ if (AI == FALSE) {
     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "adm_private_talk",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -299,7 +299,7 @@ if (PM == FALSE) {
     underConstructionMsg <- paste0("\n*", "프로덕트 매니지먼트 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "adm_private_talk",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -310,7 +310,7 @@ if (GM == FALSE) {
     underConstructionMsg <- paste0("\n*", "그로스 마케팅 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "adm_private_talk",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -321,7 +321,7 @@ if (SE == FALSE) {
     underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "adm_private_talk",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -332,31 +332,10 @@ if (BE == FALSE) {
     underConstructionMsg <- paste0("\n*", "블록체인 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "adm_private_talk",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
         reply_broadcast = FALSE,
     )
 }
-
-# if (str_detect(pNameCheck, "AI") == FALSE) {
-#     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
-# } else if (str_detect(pNameCheck, "프로덕트") == FALSE) {
-#     underConstructionMsg <- paste0("\n*", "프로덕트 매니지먼트 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
-# } else if (str_detect(pNameCheck, "그로스") == FALSE) {
-#     underConstructionMsg <- paste0("\n*", "그로스 마케팅 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
-# } else if (str_detect(pNameCheck, "소프트웨어") == FALSE) {
-#     underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
-# } else if (str_detect(pNameCheck, "블록체인") == FALSE) {
-#     underConstructionMsg <- paste0("\n*", "블록체인 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
-# }
-# underConstructionMsg
-# slackr_msg(
-#     txt = underConstructionMsg,
-#     channel = "고인물들",
-#     username = "춘식이",
-#     token = Sys.getenv("SLACK_TOKEN"),
-#     thread_ts = NULL,
-#     reply_broadcast = FALSE,
-# )
