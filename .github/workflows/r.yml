@@ -59,7 +59,9 @@ jobs:
       - run: sudo apt-get install -y --no-install-recommends libcurl4-openssl-dev
       - run: R -e 'renv::restore()'
 
-      - run: Rscript query.R
+      - run: |
+          source("R/query.R")
+        shell: Rscript {0}
 
       # - name: Set up R ${{ matrix.r-version }}
       #   uses: r-lib/actions/setup-r@v1
