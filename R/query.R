@@ -278,7 +278,7 @@ slackr_msg(
     txt = underConstructionMsg,
     channel = "U01JZG8BDK7",
     username = "로운이",
-    token = "xoxb-164075520150-2607884765314-56FcaLms1K65SEKZuNN0oKaz",
+    token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
     reply_broadcast = FALSE,
 )
