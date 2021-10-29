@@ -1,6 +1,3 @@
-install.packages("RMySQL")
-install.packages("slackr")
-install.packages("stringr")
 library(RMySQL)
 library(slackr)
 library(stringr)
@@ -62,7 +59,7 @@ ch <- Sys.getenv("SLACK_CHANNEL")
 slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", nowTime, "\n\n")
 slackr_msg(
     txt = slackStartMsg,
-    channel = "U01JZG8BDK7",
+    channel = "고인물들",
     username = "춘식이",
     token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
@@ -255,7 +252,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = "U01JZG8BDK7",
+        channel = "고인물들",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -276,7 +273,7 @@ if (str_detect(pNameCheck, "AI") == FALSE) {
 }
 slackr_msg(
     txt = underConstructionMsg,
-    channel = "U01JZG8BDK7",
+    channel = "고인물들",
     username = "춘식이",
     token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
