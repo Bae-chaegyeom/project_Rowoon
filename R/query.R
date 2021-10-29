@@ -277,7 +277,7 @@ if (str_detect(pNameCheck, "AI") == FALSE) {
 slackr_msg(
     txt = underConstructionMsg,
     channel = "U01JZG8BDK7",
-    username = "로운이",
+    username = "춘식이",
     token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
     reply_broadcast = FALSE,

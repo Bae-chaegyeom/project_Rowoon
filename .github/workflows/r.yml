@@ -35,31 +35,48 @@ jobs:
       SLACK_URL: ${{ secrets.SLACK_URL }}
       SLACK_TOKEN: ${{ secrets.SLACK_TOKEN }}
       SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
+      RENV_PATHS_ROOT: ~/.local/share/renv
 
     steps:
       - uses: actions/checkout@v2
-      - uses: r-lib/actions/setup-r@v1
+
+      - name: setup-r
+        uses: r-lib/actions/setup-r@v1
         with:
           r-version: ${{ matrix.config.r }}
           http-user-agent: ${{ matrix.config.http-user-agent }}
           use-public-rspm: true
 
-      - name: Set up R ${{ matrix.r-version }}
-        uses: r-lib/actions/setup-r@v1
-        env:
-          ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
-        with:
-          r-version: ${{ matrix.R }}
-          DB_NAME: ${{ secrets.DB_NAME }}
+      - run: R -e 'install.packages("renv")'
 
-      - name: Query dependencies
-        run: |
-          install.packages('remotes')
-          install.packages('sessioninfo')
-          saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
-          writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
-        shell: Rscript {0}
-      - name: Generate data
-        run: |
-          source("R/query.R")
-        shell: Rscript {0}
+      - name: Cache packages
+        uses: actions/cache@v1
+        with:
+          path: ${{ env.RENV_PATHS_ROOT }}
+          key: ${{ runner.os }}-renv-${{ hashFiles('**/renv.lock') }}
+          restore-keys: |-
+            ${{ runner.os }}-renv-
+      - run: sudo apt-get install -y --no-install-recommends libcurl4-openssl-dev
+      - run: R -e 'renv::restore()'
+
+      - run: Rscript query.R
+
+      # - name: Set up R ${{ matrix.r-version }}
+      #   uses: r-lib/actions/setup-r@v1
+      #   env:
+      #     ACTIONS_ALLOW_UNSECURE_COMMANDS: "true"
+      #   with:
+      #     r-version: ${{ matrix.R }}
+      #     DB_NAME: ${{ secrets.DB_NAME }}
+
+      # - name: Query dependencies
+      #   run: |
+      #     install.packages('remotes')
+      #     install.packages('sessioninfo')
+      #     saveRDS(remotes::dev_package_deps(dependencies = TRUE), ".github/depends.Rds", version = 2)
+      #     writeLines(sprintf("R-%i.%i", getRversion()$major, getRversion()$minor), ".github/R-version")
+      #   shell: Rscript {0}
+      # - name: Generate data
+      #   run: |
+      #     source("R/query.R")
+      #   shell: Rscript {0}
