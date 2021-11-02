@@ -230,7 +230,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
         targetNumberOfPeople <- 120
     }
 
-    slackMsg <- paste0("\n*", stApp$productName, "* ( + ", query_published_product[i, ]$elapsedTime, " / ", query_published_product[i, ]$remainingTime, " )")
+    slackMsg <- paste0("\n*", stApp$productName, "* ( D+ ", query_published_product[i, ]$elapsedTime, " / ", "D",query_published_product[i, ]$remainingTime, " )")
     slackMsg
     slackMsg <- paste0(slackMsg, "\n>지원: ", stApp$startAppCount, " / 완료: ", comApp$compAppCoun, "\n>취소: ", canceledApp$canceledAppCount, " / 이탈: ", bounceNum$bounceNum, "\n>목표: ", targetNumberOfPeople)
     if (round((comApp$compAppCount / targetNumberOfPeople) * 100, 1) < 50) {
