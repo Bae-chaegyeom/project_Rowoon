@@ -24,13 +24,20 @@ con <- dbConnect(MySQL(),
 )
 dbSendQuery(con, 'set character set "utf8"')
 
+DBTime <-dbGetQuery(
+    con, "SELECT now()")
+
+print("DB 현재시간")
+print(DBTime)
+
 ### 기수에서 숫자부분만 가져오기 Ex) AI 부트캠프 10기
 ### AI부트캠프는 동시기수 개강이니까 -2해서 변경 그러니까 숫자로 바꿔야됨
 ### AI는 동시개강이기 때문에 -2해서 반환 다른 캠프는 -1기수 해서 반환
 get_former_generation <- function(data) {
     ### 현재 기수
     present <- data$productName
-
+    print("where error?")
+    print(present)
     if (str_detect(present, "AI") == TRUE) {
         previous <- str_replace(present, gsub("\\D", "", present), as.character(as.numeric(gsub("\\D", "", present)) - 2))
     } else {
@@ -53,13 +60,15 @@ AND p.name NOT LIKE '%test%'
 AND p.name NOT LIKE '%테스트%'
 AND p.name NOT LIKE '%copy%'"
 )
+print("현재 활성화 기수")
+print(query_published_product)
 
 ### 메세지 시작 템플릿
 ch <- Sys.getenv("SLACK_CHANNEL")
 slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", nowTime, "\n\n")
 slackr_msg(
     txt = slackStartMsg,
-    channel = "adm_private_talk",
+    channel = "U01JZG8BDK7",
     username = "춘식이",
     token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
@@ -252,7 +261,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -288,7 +297,7 @@ if (AI == FALSE) {
     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -299,7 +308,7 @@ if (PM == FALSE) {
     underConstructionMsg <- paste0("\n*", "프로덕트 매니지먼트 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -310,7 +319,7 @@ if (GM == FALSE) {
     underConstructionMsg <- paste0("\n*", "그로스 마케팅 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -321,7 +330,7 @@ if (SE == FALSE) {
     underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -332,7 +341,7 @@ if (BE == FALSE) {
     underConstructionMsg <- paste0("\n*", "블록체인 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
