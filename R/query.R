@@ -86,6 +86,8 @@ AND user.email NOT LIKE '%@codestates.com'
 AND a.status = 'pending'")
 
     stApp <- dbGetQuery(con, q1)
+    ## 테스트를 위해 열어둔 상품 확인 q1 쿼리시 크루를 제외하기때문에 application에서 null값이 반환되며 R에서는 NA로 표기됨
+    ## 따라서 stApp$productName이 NA인지 확인후 NA라면 해당 반복문은 skip하는 조건
     if(is.na(stApp$productName)){
         next
     }
@@ -225,27 +227,49 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     ## 부트캠프별 목표인원 변수처리
     if (str_detect(stApp$productName, "AI") == TRUE) {
-        targetNumberOfPeople <- 60
+        targetNumberOfPeople <- 150
     } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
-        targetNumberOfPeople <- 40
+        targetNumberOfPeople <- 100
     } else if (str_detect(stApp$productName, "그로스") == TRUE) {
-        targetNumberOfPeople <- 45
+        targetNumberOfPeople <- 113
     } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
-        targetNumberOfPeople <- 45
+        targetNumberOfPeople <- 113
     } else if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
-        targetNumberOfPeople <- 120
+        targetNumberOfPeople <- 300
+    }
+
+    ## 부트캠프별 정원 변수처리
+    if (str_detect(stApp$productName, "AI") == TRUE) {
+        personnelNum <- 60
+    } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
+        personnelNum <- 40
+    } else if (str_detect(stApp$productName, "그로스") == TRUE) {
+        personnelNum <- 45
+    } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
+        personnelNum <- 45
+    } else if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
+        personnelNum <- 120
     }
 
     slackMsg <- paste0("\n*", stApp$productName, "* ( D+ ", query_published_product[i, ]$elapsedTime, " / ", "D-",abs(query_published_product[i, ]$remainingTime), " )")
     slackMsg
     slackMsg <- paste0(slackMsg, "\n>지원: ", stApp$startAppCount, " / 완료: ", comApp$compAppCoun, "\n>취소: ", canceledApp$canceledAppCount, " / 이탈: ", bounceNum$bounceNum, "\n>목표: ", targetNumberOfPeople)
-    if (round((comApp$compAppCount / targetNumberOfPeople) * 100, 1) < 50) {
-        slackMsg <- paste0(slackMsg, " :red_circle:", "\n>최종 전환: ", conversionRate, "% ")
-    } else if (round((comApp$compAppCount / targetNumberOfPeople) * 100, 1) < 100) {
-        slackMsg <- paste0(slackMsg, " :large_yellow_circle:", "\n>최종 전환: ", conversionRate, "% ")
+    if (comApp$compAppCount < round(targetNumberOfPeople/2.5)) {
+        slackMsg <- paste0(slackMsg, " :red_circle:", "\n>정원: ", personnelNum)
+    } else if (comApp$compAppCount < targetNumberOfPeople) {
+        slackMsg <- paste0(slackMsg, " :large_yellow_circle:", "\n>정원: ", personnelNum)
     } else {
+        slackMsg <- paste0(slackMsg, " :large_green_circle:", "\n>정원: ", personnelNum)
+    }
+    
+    if(round((comApp$compAppCount/personnelNum) * 100, 1) < 50){
+        slackMsg <- paste0(slackMsg, " :red_circle:", "\n>최종 전환: ", conversionRate, "% ")
+    } else if(round((comApp$compAppCount/personnelNum) * 100, 1) < 100){
+        slackMsg <- paste0(slackMsg, " :large_yellow_circle:", "\n>최종 전환: ", conversionRate, "% ")
+    }else {
         slackMsg <- paste0(slackMsg, " :large_green_circle:", "\n>최종 전환: ", conversionRate, "% ")
     }
+
 
     if (conversionRate < 5) {
         slackMsg <- paste0(slackMsg, ":red_circle:", "\n>", "\n>이전: ", preGenApp$startAppCount, " / ", preGenComApp$compAppCount, " / ", preGenConversionRate, "%\n")
