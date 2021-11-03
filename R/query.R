@@ -53,7 +53,7 @@ nowTime <- Sys.time() + 32400
 query_published_product <- dbGetQuery(
     con,
     "SELECT p.id, p.name, p.applyStartDate, DATEDIFF(now(),date(p.applyStartDate)) as elapsedTime , DATEDIFF(now(),date(p.applyEndDate)) as remainingTime FROM product p
-WHERE date(p.applyEndDate) > date(now())
+WHERE DATEDIFF(now(),date(p.applyEndDate)) <= 0
 AND date(p.serviceStartDate) > date(now())
 AND date(p.applyStartDate) < date(now())
 AND p.name NOT LIKE '%test%'
