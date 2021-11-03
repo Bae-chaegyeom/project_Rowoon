@@ -53,12 +53,13 @@ nowTime <- Sys.time() + 32400
 query_published_product <- dbGetQuery(
     con,
     "SELECT p.id, p.name, p.applyStartDate, DATEDIFF(now(),date(p.applyStartDate)) as elapsedTime , DATEDIFF(now(),date(p.applyEndDate)) as remainingTime FROM product p
-WHERE DATEDIFF(now(),date(p.applyEndDate)) <= 0
-AND date(p.serviceStartDate) > date(now())
-AND date(p.applyStartDate) < date(now())
+WHERE DATEDIFF(DATE_ADD(now(), INTERVAL 9 HOUR) ,DATE_ADD(date(p.applyEndDate), INTERVAL 9 HOUR)) <= 0
+AND DATE_ADD(date(p.serviceStartDate), INTERVAL 9 HOUR) > DATE_ADD(now(), INTERVAL 9 HOUR)
+AND DATE_ADD(date(p.applyStartDate), INTERVAL 9 HOUR) < DATE_ADD(now(), INTERVAL 9 HOUR)
 AND p.name NOT LIKE '%test%'
 AND p.name NOT LIKE '%테스트%'
-AND p.name NOT LIKE '%copy%'"
+AND p.name NOT LIKE '%copy%'
+AND p.name NOT LIKE '%결제%'"
 )
 print("현재 활성화 기수")
 print(query_published_product)
@@ -239,7 +240,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
         targetNumberOfPeople <- 120
     }
 
-    slackMsg <- paste0("\n*", stApp$productName, "* ( D+ ", query_published_product[i, ]$elapsedTime, " / ", "D",query_published_product[i, ]$remainingTime, " )")
+    slackMsg <- paste0("\n*", stApp$productName, "* ( D+ ", query_published_product[i, ]$elapsedTime, " / ", "D-",abs(query_published_product[i, ]$remainingTime), " )")
     slackMsg
     slackMsg <- paste0(slackMsg, "\n>지원: ", stApp$startAppCount, " / 완료: ", comApp$compAppCoun, "\n>취소: ", canceledApp$canceledAppCount, " / 이탈: ", bounceNum$bounceNum, "\n>목표: ", targetNumberOfPeople)
     if (round((comApp$compAppCount / targetNumberOfPeople) * 100, 1) < 50) {
