@@ -57,6 +57,13 @@ AND p.name NOT LIKE '%copy%'
 AND p.name NOT LIKE '%결제%'"
 )
 
+## 공사중 메세지를 위한 변수
+AI = FALSE
+PM = FALSE
+GM = FALSE
+BE = FALSE
+SE = FALSE
+
 
 ### 메세지 시작 템플릿
 ch <- Sys.getenv("SLACK_CHANNEL")
@@ -91,6 +98,24 @@ AND a.status = 'pending'")
     if(is.na(stApp$productName)){
         next
     }
+
+
+    if (str_detect(stApp$productName, "AI") == TRUE) {
+        AI = TRUE
+    }
+    if (str_detect(stApp$productName, "프로덕트") == TRUE) {
+        PM = TRUE
+    }
+    if (str_detect(stApp$productName, "그로스") == TRUE) {
+        GM = TRUE
+    }
+    if (str_detect(stApp$productName, "블록체인") == TRUE) {
+        BE = TRUE
+    }
+    if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
+        SE = TRUE
+    }
+
 
     ## 프로덕트 이름
     # stApp$productName
@@ -290,29 +315,9 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
     )
 }
 
-AI = FALSE
-PM = FALSE
-GM = FALSE
-BE = FALSE
-SE = FALSE
 
-for (i in 1:nrow(query_published_product)) {
-    if (str_detect(query_published_product[i, ]$name, "AI") == TRUE) {
-        AI = TRUE
-    }
-    if (str_detect(query_published_product[i, ]$name, "프로덕트") == TRUE) {
-        PM = TRUE
-    }
-    if (str_detect(query_published_product[i, ]$name, "그로스") == TRUE) {
-        GM = TRUE
-    }
-    if (str_detect(query_published_product[i, ]$name, "블록체인") == TRUE) {
-        BE = TRUE
-    }
-    if (str_detect(query_published_product[i, ]$name, "소프트웨어") == TRUE) {
-        SE = TRUE
-    }
-}
+
+
 
 if (AI == FALSE) {
     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
