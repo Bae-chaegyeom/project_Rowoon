@@ -43,6 +43,8 @@ get_former_generation <- function(data) {
 
 ### Github 시간이 UTC 기준이기 때문에 9시간을 더해서 한국시간과 일치시킵니다.
 nowTime <- Sys.time() + 32400
+currentHour <- as.POSIXlt(nowTime)$hour
+
 
 ### 현재 지원과정 중인 기수를 가져옵니다
 query_published_product <- dbGetQuery(
@@ -67,10 +69,10 @@ SE = FALSE
 
 ### 메세지 시작 템플릿
 ch <- Sys.getenv("SLACK_CHANNEL")
-slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", nowTime, "\n\n")
+slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", currentHour, "시", "\n\n")
 slackr_msg(
     txt = slackStartMsg,
-    channel = "adm_private_talk",
+    channel = "U01JZG8BDK7",
     username = "춘식이",
     token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
@@ -145,19 +147,19 @@ AND a.status = 'pending'")
     ## 지원 완료 인원
     # comApp$compAppCount
 
-    ## 어제 지원 시작 수 쿼리
+    ## 어제까지 지원 인원 수 쿼리
     q4 <- paste("SELECT count(user.id) as yesterDayStartAppCount FROM application a
 JOIN user ON user.id = a.userId
 WHERE a.productId =", pdi, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
 AND a.status = 'pending'
-AND date(a.createdAt) = date(now() - INTERVAL 1 DAY)")
+AND TIMESTAMP(a.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 
     yesStartApp <- dbGetQuery(con, q4)
     ## 어제 지원 시작 인원
     # yesStartApp$yesterDayStartAppCount
 
-    ## 어제 지원 완료 수 쿼리
+    ## 어제까지 지원 완료 수 쿼리
     q5 <- paste("SELECT COUNT(DISTINCT user.id) as yesterDayCompAppCount FROM application a
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON ass.applicationStepId = as2.id
@@ -165,7 +167,7 @@ JOIN user ON user.id = a.userId
 WHERE a.productId =", pdi, "AND as2.order =", laOrder, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
 AND a.status = 'pending'
-AND date(ass.createdAt) = date(now() - INTERVAL 1 DAY)")
+AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 
     yesComApp <- dbGetQuery(con, q5)
     ## 어제 지원 완료 인원
@@ -278,7 +280,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     slackMsg <- paste0("\n*", stApp$productName, "* ( D+ ", query_published_product[i, ]$elapsedTime, " / ", "D-",abs(query_published_product[i, ]$remainingTime), " )")
     slackMsg
-    slackMsg <- paste0(slackMsg, "\n>지원: ", stApp$startAppCount, " / 완료: ", comApp$compAppCoun, "\n>취소: ", canceledApp$canceledAppCount, " / 이탈: ", bounceNum$bounceNum, "\n>목표: ", targetNumberOfPeople)
+    slackMsg <- paste0(slackMsg, "\n>지원: ", stApp$startAppCount, "(:small_red_triangle:", stApp$startAppCount-yesStartApp, ")", " / 완료: ", comApp$compAppCoun, "(:small_red_triangle:", comApp$compAppCoun-yesComApp, ")", "\n>취소: ", canceledApp$canceledAppCount, " / 이탈: ", bounceNum$bounceNum, "\n>목표: ", targetNumberOfPeople)
     if (comApp$compAppCount < round(targetNumberOfPeople/2.5)) {
         slackMsg <- paste0(slackMsg, " :red_circle:", "\n>정원: ", personnelNum)
     } else if (comApp$compAppCount < targetNumberOfPeople) {
@@ -307,7 +309,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -323,7 +325,7 @@ if (AI == FALSE) {
     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -334,7 +336,7 @@ if (PM == FALSE) {
     underConstructionMsg <- paste0("\n*", "프로덕트 매니지먼트 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -345,7 +347,7 @@ if (GM == FALSE) {
     underConstructionMsg <- paste0("\n*", "그로스 마케팅 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -356,7 +358,7 @@ if (SE == FALSE) {
     underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -367,7 +369,7 @@ if (BE == FALSE) {
     underConstructionMsg <- paste0("\n*", "블록체인 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "adm_private_talk",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
