@@ -69,10 +69,10 @@ SE = FALSE
 
 ### 메세지 시작 템플릿
 ch <- Sys.getenv("SLACK_CHANNEL")
-slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", currentHour, "시", "\n\n")
+slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", currentHour, "시", "\n>이탈 : 지원취소를 하지 않았지만, 다음 단계를 진행하지 않은지 7일 이상 된 인원", "\n>춘식이를 소개합니다." "\n\n")
 slackr_msg(
     txt = slackStartMsg,
-    channel = "#team-admission",
+    channel = "U01JZG8BDK7",
     username = "춘식이",
     token = Sys.getenv("SLACK_TOKEN"),
     thread_ts = NULL,
@@ -278,7 +278,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
         personnelNum <- 120
     }
 
-    slackMsg <- paste0("\n*", stApp$productName, "* ( D+ ", query_published_product[i, ]$elapsedTime, " / ", "D-",abs(query_published_product[i, ]$remainingTime), " )")
+    slackMsg <- paste0("\n*", stApp$productName, "* ( D+", query_published_product[i, ]$elapsedTime, " / ", "D-",abs(query_published_product[i, ]$remainingTime), " )")
     slackMsg
     slackMsg <- paste0(slackMsg, "\n>지원: ", stApp$startAppCount, "(:small_red_triangle:", stApp$startAppCount-yesStartApp, ")", " / 완료: ", comApp$compAppCoun, "(:small_red_triangle:", comApp$compAppCoun-yesComApp, ")", "\n>취소: ", canceledApp$canceledAppCount, " / 이탈: ", bounceNum$bounceNum, "\n>목표: ", targetNumberOfPeople)
     if (comApp$compAppCount < round(targetNumberOfPeople/2.5)) {
@@ -309,7 +309,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -325,7 +325,7 @@ if (AI == FALSE) {
     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -336,7 +336,7 @@ if (PM == FALSE) {
     underConstructionMsg <- paste0("\n*", "프로덕트 매니지먼트 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -347,7 +347,7 @@ if (GM == FALSE) {
     underConstructionMsg <- paste0("\n*", "그로스 마케팅 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -358,7 +358,7 @@ if (SE == FALSE) {
     underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -369,7 +369,7 @@ if (BE == FALSE) {
     underConstructionMsg <- paste0("\n*", "블록체인 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:공사 중 입니다:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
