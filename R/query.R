@@ -69,7 +69,7 @@ SE = FALSE
 
 ### 메세지 시작 템플릿
 ch <- Sys.getenv("SLACK_CHANNEL")
-slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", currentHour, "시", "\n>이탈 : 지원취소를 하지 않았지만, 다음 단계를 진행하지 않은지 7일 이상 된 인원", "\n>[춘식이를 소개합니다.](https://www.notion.so/codestates/d7aaa720460a4291824f408004a312bb)", "\n\n")
+slackStartMsg <- paste0("*지원상황*", "\n>쿼리 기준시간 : ", currentHour, "시", "\n>이탈 : 지원취소를 하지 않았지만, 다음 단계를 진행하지 않은지 7일 이상 된 인원", "\n>춘식이를 [소개](https://www.notion.so/codestates/d7aaa720460a4291824f408004a312bb)합니다.", "\n\n")
 slackr_msg(
     txt = slackStartMsg,
     channel = "U01JZG8BDK7",
