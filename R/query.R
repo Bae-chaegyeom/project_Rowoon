@@ -243,7 +243,8 @@ WHERE afs.id IN (
 	SELECT MAX(id) FROM application_form_submission afs2 GROUP BY afs2.applicationId
 	)
 AND a.productId =", pdi, "AND DATEDIFF(now(), date(afs.submittedAt)) > 7
-AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
+AND as2.order < ", bounceOrder, "AND user.role <> 'admin'
+AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
 
     bounceNum <- dbGetQuery(con, q11)
 
@@ -309,7 +310,7 @@ AND as2.order < ", bounceOrder, "GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = "U01JZG8BDK7",
+        channel = "#team-admission",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -325,7 +326,7 @@ if (AI == FALSE) {
     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "#team-admission",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -336,7 +337,7 @@ if (PM == FALSE) {
     underConstructionMsg <- paste0("\n*", "프로덕트 매니지먼트 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "#team-admission",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -347,7 +348,7 @@ if (GM == FALSE) {
     underConstructionMsg <- paste0("\n*", "그로스 마케팅 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "#team-admission",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -358,7 +359,7 @@ if (SE == FALSE) {
     underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "#team-admission",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -369,7 +370,7 @@ if (BE == FALSE) {
     underConstructionMsg <- paste0("\n*", "블록체인 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "U01JZG8BDK7",
+        channel = "#team-admission",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
