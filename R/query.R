@@ -192,7 +192,7 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 
     q6 <- paste0("SELECT p.id FROM product p WHERE p.name = '", previousGen, "'")
     ### 첫기수가 아닐때만 동작
-    if (previous != 0) {
+    if (previousGen != 0) {
         previousGenPId <- dbGetQuery(con, q6)
     }
 
@@ -203,7 +203,7 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'")
-    if (previous != 0) {
+    if (previousGen != 0) {
         preGenApp <- dbGetQuery(con, q7)
     }
     # preGenApp$startAppCount
@@ -214,7 +214,7 @@ AND user.email NOT LIKE '%@codestates.com'")
 WHERE as2.productId =", previousGenPId)
 
     ## 이전기수 지원 완료 인원 확인
-    if (previous != 0) {
+    if (previousGen != 0) {
         preGenLaOr <- dbGetQuery(con, q8)
     }
 
@@ -224,7 +224,7 @@ JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND as2.order =", preGenLaOr, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'")
-    if (previous != 0) {
+    if (previousGen != 0) {
         preGenComApp <- dbGetQuery(con, q9)
     }
     # preGenComApp$compAppCount
@@ -266,7 +266,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
 
 
     ## 이전기수 전환률
-    if (previous != 0) {
+    if (previousGen != 0) {
         preGenConversionRate <- round((preGenComApp$compAppCount / preGenApp$startAppCount) * 100, 1)
     }
 
@@ -327,7 +327,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
         slackMsg <- paste0(slackMsg, ":large_green_circle:")
     }
 
-    if (previous == 0) {
+    if (previousGen == 0) {
         slackMsg <- paste0(slackMsg, "\n>", "\n> 첫 기수 입니다.")
     } else {
         slackMsg <- paste0(slackMsg, "\n>", "\n>이전: ", preGenApp$startAppCount, " / ", preGenComApp$compAppCount, " / ", preGenConversionRate, "%\n")
