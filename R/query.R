@@ -24,8 +24,9 @@ con <- dbConnect(MySQL(),
 )
 dbSendQuery(con, 'set character set "utf8"')
 
-DBTime <-dbGetQuery(
-    con, "SELECT now()")
+DBTime <- dbGetQuery(
+    con, "SELECT now()"
+)
 
 ### 기수에서 숫자부분만 가져오기 Ex) AI 부트캠프 10기
 ### AI부트캠프는 동시기수 개강이니까 -2해서 변경 그러니까 숫자로 바꿔야됨
@@ -33,7 +34,7 @@ DBTime <-dbGetQuery(
 get_former_generation <- function(data) {
     ### 현재 기수
     present <- data$productName
-    if(as.numeric(gsub("\\D", "", present) == TRUE){
+    if (as.numeric(gsub("\\D", "", present)) == 1) {
         previous <- 0
         return(previous)
     }
@@ -64,12 +65,12 @@ AND p.name NOT LIKE '%결제%'"
 )
 
 ## 공사중 메세지를 위한 변수
-AI = FALSE
-PM = FALSE
-GM = FALSE
-BE = FALSE
-SE = FALSE
-Dev = FALSE
+AI <- FALSE
+PM <- FALSE
+GM <- FALSE
+BE <- FALSE
+SE <- FALSE
+Dev <- FALSE
 
 
 ### 메세지 시작 템플릿
@@ -102,28 +103,28 @@ AND a.status = 'pending'")
     stApp <- dbGetQuery(con, q1)
     ## 테스트를 위해 열어둔 상품 확인 q1 쿼리시 크루를 제외하기때문에 application에서 null값이 반환되며 R에서는 NA로 표기됨
     ## 따라서 stApp$productName이 NA인지 확인후 NA라면 해당 반복문은 skip하는 조건
-    if(is.na(stApp$productName)){
+    if (is.na(stApp$productName)) {
         next
     }
 
 
     if (str_detect(stApp$productName, "AI") == TRUE) {
-        AI = TRUE
+        AI <- TRUE
     }
     if (str_detect(stApp$productName, "프로덕트") == TRUE) {
-        PM = TRUE
+        PM <- TRUE
     }
     if (str_detect(stApp$productName, "그로스") == TRUE) {
-        GM = TRUE
+        GM <- TRUE
     }
     if (str_detect(stApp$productName, "블록체인") == TRUE) {
-        BE = TRUE
+        BE <- TRUE
     }
     if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
-        SE = TRUE
+        SE <- TRUE
     }
     if (str_detect(stApp$productName, "DevOps") == TRUE) {
-        Dev = TRUE
+        Dev <- TRUE
     }
 
 
@@ -191,7 +192,7 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 
     q6 <- paste0("SELECT p.id FROM product p WHERE p.name = '", previousGen, "'")
     ### 첫기수가 아닐때만 동작
-    if(previous != 0){
+    if (previous != 0) {
         previousGenPId <- dbGetQuery(con, q6)
     }
 
@@ -202,7 +203,7 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'")
-    if(previous != 0){
+    if (previous != 0) {
         preGenApp <- dbGetQuery(con, q7)
     }
     # preGenApp$startAppCount
@@ -213,7 +214,7 @@ AND user.email NOT LIKE '%@codestates.com'")
 WHERE as2.productId =", previousGenPId)
 
     ## 이전기수 지원 완료 인원 확인
-    if(previous != 0){
+    if (previous != 0) {
         preGenLaOr <- dbGetQuery(con, q8)
     }
 
@@ -223,7 +224,7 @@ JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND as2.order =", preGenLaOr, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'")
-    if(previous != 0){
+    if (previous != 0) {
         preGenComApp <- dbGetQuery(con, q9)
     }
     # preGenComApp$compAppCount
@@ -265,7 +266,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
 
 
     ## 이전기수 전환률
-    if(previous != 0){
+    if (previous != 0) {
         preGenConversionRate <- round((preGenComApp$compAppCount / preGenApp$startAppCount) * 100, 1)
     }
 
@@ -299,36 +300,36 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
         personnelNum <- 40
     }
 
-    slackMsg <- paste0("\n*", stApp$productName, "* ( D+", query_published_product[i, ]$elapsedTime, " / ", "D-",abs(query_published_product[i, ]$remainingTime), " )")
+    slackMsg <- paste0("\n*", stApp$productName, "* ( D+", query_published_product[i, ]$elapsedTime, " / ", "D-", abs(query_published_product[i, ]$remainingTime), " )")
     slackMsg
-    slackMsg <- paste0(slackMsg, "\n>지원: ", stApp$startAppCount, "(:small_red_triangle:", stApp$startAppCount-yesStartApp, ")", " / 완료: ", comApp$compAppCoun, "(:small_red_triangle:", comApp$compAppCoun-yesComApp, ")", "\n>취소: ", canceledApp$canceledAppCount, " / 이탈: ", bounceNum$bounceNum, "\n>목표: ", targetNumberOfPeople)
-    if (comApp$compAppCount < round(targetNumberOfPeople/2.5)) {
+    slackMsg <- paste0(slackMsg, "\n>지원: ", stApp$startAppCount, "(:small_red_triangle:", stApp$startAppCount - yesStartApp, ")", " / 완료: ", comApp$compAppCoun, "(:small_red_triangle:", comApp$compAppCoun - yesComApp, ")", "\n>취소: ", canceledApp$canceledAppCount, " / 이탈: ", bounceNum$bounceNum, "\n>목표: ", targetNumberOfPeople)
+    if (comApp$compAppCount < round(targetNumberOfPeople / 2.5)) {
         slackMsg <- paste0(slackMsg, " :red_circle:", "\n>정원: ", personnelNum)
     } else if (comApp$compAppCount < targetNumberOfPeople) {
         slackMsg <- paste0(slackMsg, " :large_yellow_circle:", "\n>정원: ", personnelNum)
     } else {
         slackMsg <- paste0(slackMsg, " :large_green_circle:", "\n>정원: ", personnelNum)
     }
-    
-    if(round((comApp$compAppCount/personnelNum) * 100, 1) < 50){
+
+    if (round((comApp$compAppCount / personnelNum) * 100, 1) < 50) {
         slackMsg <- paste0(slackMsg, " :red_circle:", "\n>최종 전환: ", conversionRate, "% ")
-    } else if(round((comApp$compAppCount/personnelNum) * 100, 1) < 100){
+    } else if (round((comApp$compAppCount / personnelNum) * 100, 1) < 100) {
         slackMsg <- paste0(slackMsg, " :large_yellow_circle:", "\n>최종 전환: ", conversionRate, "% ")
-    }else {
+    } else {
         slackMsg <- paste0(slackMsg, " :large_green_circle:", "\n>최종 전환: ", conversionRate, "% ")
     }
 
     if (conversionRate < 5) {
         slackMsg <- paste0(slackMsg, ":red_circle:")
     } else if (conversionRate <= 15) {
-        slackMsg <- paste0(slackMsg, ":large_yellow_circle:", "\n>")
+        slackMsg <- paste0(slackMsg, ":large_yellow_circle:")
     } else {
-        slackMsg <- paste0(slackMsg, ":large_green_circle:", "\n>")
+        slackMsg <- paste0(slackMsg, ":large_green_circle:")
     }
 
-    if(previous == 0){
-        slackMsg <- paste0(slackMsg, "\n", "\n> 첫 기수 입니다.")
-    }else{
+    if (previous == 0) {
+        slackMsg <- paste0(slackMsg, "\n>", "\n> 첫 기수 입니다.")
+    } else {
         slackMsg <- paste0(slackMsg, "\n>", "\n>이전: ", preGenApp$startAppCount, " / ", preGenComApp$compAppCount, " / ", preGenConversionRate, "%\n")
     }
 
