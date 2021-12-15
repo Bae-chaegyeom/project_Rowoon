@@ -33,6 +33,10 @@ DBTime <-dbGetQuery(
 get_former_generation <- function(data) {
     ### 현재 기수
     present <- data$productName
+    if(as.numeric(gsub("\\D", "", present) == TRUE){
+        previous <- 0
+        return(previous)
+    }
     if (str_detect(present, "AI") == TRUE) {
         previous <- str_replace(present, gsub("\\D", "", present), as.character(as.numeric(gsub("\\D", "", present)) - 2))
     } else {
@@ -186,9 +190,11 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
     previousGen <- get_former_generation(stApp)
 
     q6 <- paste0("SELECT p.id FROM product p WHERE p.name = '", previousGen, "'")
+    ### 첫기수가 아닐때만 동작
+    if(previous != 0){
+        previousGenPId <- dbGetQuery(con, q6)
+    }
 
-    previousGenPId <- dbGetQuery(con, q6)
-    previousGenPId
 
     ## 이전기수 지원 인원 쿼리
     ### DISTINCT 조건을 통해 지원취소 후 재지원 인원 제거 AI 8기에서 확인 총 825명이지만 같은 user.id로 재지원 이력 20건, 크루지원 7건 제외후 798명 맞는 것으로 확인
@@ -196,8 +202,9 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'")
-
-    preGenApp <- dbGetQuery(con, q7)
+    if(previous != 0){
+        preGenApp <- dbGetQuery(con, q7)
+    }
     # preGenApp$startAppCount
     # preGenApp$productName
 
@@ -206,7 +213,9 @@ AND user.email NOT LIKE '%@codestates.com'")
 WHERE as2.productId =", previousGenPId)
 
     ## 이전기수 지원 완료 인원 확인
-    preGenLaOr <- dbGetQuery(con, q8)
+    if(previous != 0){
+        preGenLaOr <- dbGetQuery(con, q8)
+    }
 
     q9 <- paste("SELECT COUNT(DISTINCT user.id) as compAppCount FROM application a
 JOIN application_step_submission ass ON ass.applicationId = a.id
@@ -214,8 +223,9 @@ JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND as2.order =", preGenLaOr, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'")
-
-    preGenComApp <- dbGetQuery(con, q9)
+    if(previous != 0){
+        preGenComApp <- dbGetQuery(con, q9)
+    }
     # preGenComApp$compAppCount
 
 
@@ -255,7 +265,9 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
 
 
     ## 이전기수 전환률
-    preGenConversionRate <- round((preGenComApp$compAppCount / preGenApp$startAppCount) * 100, 1)
+    if(previous != 0){
+        preGenConversionRate <- round((preGenComApp$compAppCount / preGenApp$startAppCount) * 100, 1)
+    }
 
     ## 부트캠프별 목표인원 변수처리
     if (str_detect(stApp$productName, "AI") == TRUE) {
@@ -306,13 +318,18 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
         slackMsg <- paste0(slackMsg, " :large_green_circle:", "\n>최종 전환: ", conversionRate, "% ")
     }
 
-
     if (conversionRate < 5) {
-        slackMsg <- paste0(slackMsg, ":red_circle:", "\n>", "\n>이전: ", preGenApp$startAppCount, " / ", preGenComApp$compAppCount, " / ", preGenConversionRate, "%\n")
+        slackMsg <- paste0(slackMsg, ":red_circle:")
     } else if (conversionRate <= 15) {
-        slackMsg <- paste0(slackMsg, ":large_yellow_circle:", "\n>", "\n>이전: ", preGenApp$startAppCount, " / ", preGenComApp$compAppCount, " / ", preGenConversionRate, "%\n")
+        slackMsg <- paste0(slackMsg, ":large_yellow_circle:", "\n>")
     } else {
-        slackMsg <- paste0(slackMsg, ":large_green_circle:", "\n>", "\n>이전: ", preGenApp$startAppCount, " / ", preGenComApp$compAppCount, " / ", preGenConversionRate, "%\n")
+        slackMsg <- paste0(slackMsg, ":large_green_circle:", "\n>")
+    }
+
+    if(previous == 0){
+        slackMsg <- paste0(slackMsg, "\n", "\n> 첫 기수 입니다.")
+    }else{
+        slackMsg <- paste0(slackMsg, "\n>", "\n>이전: ", preGenApp$startAppCount, " / ", preGenComApp$compAppCount, " / ", preGenConversionRate, "%\n")
     }
 
 
