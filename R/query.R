@@ -195,45 +195,47 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
     previousGen <- get_former_generation(stApp)
     print("여기는 잘 되는지 보자")
     print(previousGen)
-    q6 <- paste0("SELECT p.id FROM product p WHERE p.name = '", previousGen, "'")
-    ### 첫기수가 아닐때만 동작
+    ## 이전기수가 0이면 이전기수에 대한 쿼리부분은 넘기도록 조건문 처리
     if (previousGen != 0) {
+        q6 <- paste0("SELECT p.id FROM product p WHERE p.name = '", previousGen, "'")
+        ### 첫기수가 아닐때만 동작
+
         previousGenPId <- dbGetQuery(con, q6)
-    }
 
 
-    ## 이전기수 지원 인원 쿼리
-    ### DISTINCT 조건을 통해 지원취소 후 재지원 인원 제거 AI 8기에서 확인 총 825명이지만 같은 user.id로 재지원 이력 20건, 크루지원 7건 제외후 798명 맞는 것으로 확인
-    q7 <- paste("SELECT a.productName, count(DISTINCT user.id) as startAppCount FROM application a
+
+        ## 이전기수 지원 인원 쿼리
+        ### DISTINCT 조건을 통해 지원취소 후 재지원 인원 제거 AI 8기에서 확인 총 825명이지만 같은 user.id로 재지원 이력 20건, 크루지원 7건 제외후 798명 맞는 것으로 확인
+        q7 <- paste("SELECT a.productName, count(DISTINCT user.id) as startAppCount FROM application a
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'")
-    if (previousGen != 0) {
-        preGenApp <- dbGetQuery(con, q7)
-    }
-    # preGenApp$startAppCount
-    # preGenApp$productName
 
-    ## 이전기수 마지막 단계 확인
-    q8 <- paste("SELECT MAX(as2.order) as lastStep FROM application_step as2
+        preGenApp <- dbGetQuery(con, q7)
+
+        # preGenApp$startAppCount
+        # preGenApp$productName
+
+        ## 이전기수 마지막 단계 확인
+        q8 <- paste("SELECT MAX(as2.order) as lastStep FROM application_step as2
 WHERE as2.productId =", previousGenPId)
 
-    ## 이전기수 지원 완료 인원 확인
-    if (previousGen != 0) {
-        preGenLaOr <- dbGetQuery(con, q8)
-    }
+        ## 이전기수 지원 완료 인원 확인
 
-    q9 <- paste("SELECT COUNT(DISTINCT user.id) as compAppCount FROM application a
+        preGenLaOr <- dbGetQuery(con, q8)
+
+
+        q9 <- paste("SELECT COUNT(DISTINCT user.id) as compAppCount FROM application a
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND as2.order =", preGenLaOr, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'")
-    if (previousGen != 0) {
-        preGenComApp <- dbGetQuery(con, q9)
-    }
-    # preGenComApp$compAppCount
 
+        preGenComApp <- dbGetQuery(con, q9)
+
+        # preGenComApp$compAppCount
+    }
 
     ### 지원 취소 인원
     q10 <- paste("SELECT a.productName, count(DISTINCT user.id) as canceledAppCount FROM application a
