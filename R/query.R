@@ -36,6 +36,8 @@ get_former_generation <- function(data) {
     present <- data$productName
     if (as.numeric(gsub("\\D", "", present)) == 1) {
         previous <- 0
+        print("여기서 문제인거 같은데?")
+        print(previous)
         return(previous)
     }
     if (str_detect(present, "AI") == TRUE) {
@@ -189,7 +191,8 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
     ## 이전기수 확인 대기자 상품 버림
     ## 이전기수 이름 확인하기
     previousGen <- get_former_generation(stApp)
-
+    print("여기는 잘 되는지 보자")
+    print(previousGen)
     q6 <- paste0("SELECT p.id FROM product p WHERE p.name = '", previousGen, "'")
     ### 첫기수가 아닐때만 동작
     if (previousGen != 0) {
@@ -336,7 +339,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -352,7 +355,7 @@ if (AI == FALSE) {
     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -363,7 +366,7 @@ if (PM == FALSE) {
     underConstructionMsg <- paste0("\n*", "프로덕트 매니지먼트 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -374,7 +377,7 @@ if (GM == FALSE) {
     underConstructionMsg <- paste0("\n*", "그로스 마케팅 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -385,7 +388,7 @@ if (SE == FALSE) {
     underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -396,7 +399,7 @@ if (BE == FALSE) {
     underConstructionMsg <- paste0("\n*", "블록체인 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -407,7 +410,7 @@ if (Dev == FALSE) {
     underConstructionMsg <- paste0("\n*", "데브옵스 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
