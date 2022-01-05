@@ -34,6 +34,8 @@ DBTime <- dbGetQuery(
 get_former_generation <- function(data) {
     ### 현재 기수
     present <- data$productName
+    print("무슨 기수이길래 안되는데?")
+    print(present)
     if (as.numeric(gsub("\\D", "", present)) == 1) {
         previous <- 0
         print("여기서 문제인거 같은데?")
