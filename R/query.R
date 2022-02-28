@@ -98,11 +98,12 @@ for (i in 1:nrow(query_published_product)) {
     # query_published_product[i, ]$elapsedTime
     # query_published_product[i, ]$remainingTime
     ## productId가지고 누적 지원 수 가져오는 쿼리
+    ### a.status를 사용하지 않게 되어 a.applyingStatus를 통해 지원중 인원 쿼리
     q1 <- paste("SELECT a.productName, count(user.id) as startAppCount FROM application a
 JOIN user ON user.id = a.userId
 WHERE a.productId =", pdi, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
-AND a.status = 'pending'")
+AND a.applyingStatus = 'applying'")
 
     stApp <- dbGetQuery(con, q1)
     ## 테스트를 위해 열어둔 상품 확인 q1 쿼리시 크루를 제외하기때문에 application에서 null값이 반환되며 R에서는 NA로 표기됨
@@ -146,14 +147,12 @@ WHERE as2.productId =", pdi)
     laOrder <- lastOrder$lastStep
 
 
-    ## productId랑 product.order로 지원완료인원 수 쿼리
+    ## productId와 applyingStatus = submitted 조건으로 지원완료인원 쿼리
     q3 <- paste("SELECT COUNT(DISTINCT user.id) as compAppCount FROM application a
-JOIN application_step_submission ass ON ass.applicationId = a.id
-JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
-WHERE a.productId =", pdi, "AND as2.order =", laOrder, "AND user.role <> 'admin'
+WHERE a.productId =", pdi, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
-AND a.status = 'pending'")
+AND a.applyingStatus = 'submitted'")
 
     comApp <- dbGetQuery(con, q3)
 
@@ -165,7 +164,7 @@ AND a.status = 'pending'")
 JOIN user ON user.id = a.userId
 WHERE a.productId =", pdi, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
-AND a.status = 'pending'
+AND a.applyingStatus = 'applying'
 AND TIMESTAMP(a.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 
     yesStartApp <- dbGetQuery(con, q4)
@@ -177,9 +176,9 @@ AND TIMESTAMP(a.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
-WHERE a.productId =", pdi, "AND as2.order =", laOrder, "AND user.role <> 'admin'
+WHERE a.productId =", pdi, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
-AND a.status = 'pending'
+AND a.applyingStatus = 'submitted'
 AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 
     yesComApp <- dbGetQuery(con, q5)
@@ -209,7 +208,8 @@ AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
         q7 <- paste("SELECT a.productName, count(DISTINCT user.id) as startAppCount FROM application a
 JOIN user ON user.id = a.userId
 WHERE a.productId =", previousGenPId, "AND user.role <> 'admin'
-AND user.email NOT LIKE '%@codestates.com'")
+AND user.email NOT LIKE '%@codestates.com'
+AND a.applyingStatus <> 'cancelled'")
 
         preGenApp <- dbGetQuery(con, q7)
 
@@ -229,8 +229,9 @@ WHERE as2.productId =", previousGenPId)
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
-WHERE a.productId =", previousGenPId, "AND as2.order =", preGenLaOr, "AND user.role <> 'admin'
-AND user.email NOT LIKE '%@codestates.com'")
+WHERE a.productId =", previousGenPId, "AND user.role <> 'admin'
+AND user.email NOT LIKE '%@codestates.com'
+AND a.applyingStatus = 'submitted'")
 
         preGenComApp <- dbGetQuery(con, q9)
 
@@ -242,7 +243,7 @@ AND user.email NOT LIKE '%@codestates.com'")
 JOIN user ON user.id = a.userId
 WHERE a.productId = ", pdi, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
-AND a.status = 'cancelled'")
+AND a.applyingStatus = 'cancelled'")
     canceledApp <- dbGetQuery(con, q10)
     # canceledApp$canceledAppCount
 
@@ -343,7 +344,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
 
     slackr_msg(
         txt = slackMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -359,7 +360,7 @@ if (AI == FALSE) {
     underConstructionMsg <- paste0("\n*", "AI 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -370,7 +371,7 @@ if (PM == FALSE) {
     underConstructionMsg <- paste0("\n*", "프로덕트 매니지먼트 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -381,7 +382,7 @@ if (GM == FALSE) {
     underConstructionMsg <- paste0("\n*", "그로스 마케팅 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -392,7 +393,7 @@ if (SE == FALSE) {
     underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -403,7 +404,7 @@ if (BE == FALSE) {
     underConstructionMsg <- paste0("\n*", "블록체인 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
@@ -414,7 +415,7 @@ if (Dev == FALSE) {
     underConstructionMsg <- paste0("\n*", "데브옵스 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
-        channel = "#team-admission",
+        channel = "U01JZG8BDK7",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
         thread_ts = NULL,
