@@ -73,8 +73,10 @@ AI <- FALSE
 PM <- FALSE
 GM <- FALSE
 BE <- FALSE
-SE <- FALSE
+# SE <- FALSE
 Dev <- FALSE
+FB <- FALSE
+BB <- FALSE
 
 
 ### 메세지 시작 템플릿
@@ -125,13 +127,18 @@ AND a.applyingStatus = 'applying'")
     if (str_detect(stApp$productName, "블록체인") == TRUE) {
         BE <- TRUE
     }
-    if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
-        SE <- TRUE
-    }
+    # if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
+    #     SE <- TRUE
+    # }
     if (str_detect(stApp$productName, "DevOps") == TRUE) {
         Dev <- TRUE
     }
-
+    if (str_detect(stApp$productName, "프론트엔드") == TRUE) {
+        FB <- TRUE
+    }
+    if (str_detect(stApp$productName, "백엔드") == TRUE) {
+        BB <- TRUE
+    }
 
     ## 프로덕트 이름
     # stApp$productName
@@ -287,8 +294,10 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
         targetNumberOfPeople <- 113
     } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
         targetNumberOfPeople <- 113
-    } else if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
-        targetNumberOfPeople <- 300
+    } else if (str_detect(stApp$productName, "프론트엔드") == TRUE) {
+        targetNumberOfPeople <- 450
+    } else if (str_detect(stApp$productName, "백엔드") == TRUE) {
+        targetNumberOfPeople <- 450
     } else if (str_detect(stApp$productName, "DevOps") == TRUE) {
         targetNumberOfPeople <- 150
     }
@@ -302,8 +311,10 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
         personnelNum <- 45
     } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
         personnelNum <- 45
-    } else if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
-        personnelNum <- 120
+    } else if (str_detect(stApp$productName, "프론트엔드") == TRUE) {
+        personnelNum <- 140
+    } else if (str_detect(stApp$productName, "백엔드") == TRUE) {
+        personnelNum <- 140
     } else if (str_detect(stApp$productName, "DevOps") == TRUE) {
         personnelNum <- 60
     }
@@ -389,8 +400,19 @@ if (GM == FALSE) {
         reply_broadcast = FALSE,
     )
 }
-if (SE == FALSE) {
-    underConstructionMsg <- paste0("\n*", "소프트웨어 엔지니어링 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
+if (FB == FALSE) {
+    underConstructionMsg <- paste0("\n*", "프론트엔드 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
+    slackr_msg(
+        txt = underConstructionMsg,
+        channel = "U01JZG8BDK7",
+        username = "춘식이",
+        token = Sys.getenv("SLACK_TOKEN"),
+        thread_ts = NULL,
+        reply_broadcast = FALSE,
+    )
+}
+if (BB == FALSE) {
+    underConstructionMsg <- paste0("\n*", "백엔드 부트캠프", "*", "\n>:hammer_and_wrench:모집 준비중:hammer_and_wrench:")
     slackr_msg(
         txt = underConstructionMsg,
         channel = "U01JZG8BDK7",
