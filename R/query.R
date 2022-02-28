@@ -42,11 +42,11 @@ get_former_generation <- function(data) {
         print(previous)
         return(previous)
     }
-    if (str_detect(present, "AI") == TRUE) {
-        previous <- str_replace(present, gsub("\\D", "", present), as.character(as.numeric(gsub("\\D", "", present)) - 2))
-    } else {
-        previous <- str_replace(present, gsub("\\D", "", present), as.character(as.numeric(gsub("\\D", "", present)) - 1))
-    }
+    # if (str_detect(present, "AI") == TRUE) {
+    #     previous <- str_replace(present, gsub("\\D", "", present), as.character(as.numeric(gsub("\\D", "", present)) - 2))
+    # } else {
+    previous <- str_replace(present, gsub("\\D", "", present), as.character(as.numeric(gsub("\\D", "", present)) - 1))
+    # }
     return(previous)
 }
 
@@ -280,7 +280,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
 
     ## 부트캠프별 목표인원 변수처리
     if (str_detect(stApp$productName, "AI") == TRUE) {
-        targetNumberOfPeople <- 150
+        targetNumberOfPeople <- 360
     } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
         targetNumberOfPeople <- 113
     } else if (str_detect(stApp$productName, "그로스") == TRUE) {
@@ -290,12 +290,12 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
     } else if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
         targetNumberOfPeople <- 300
     } else if (str_detect(stApp$productName, "DevOps") == TRUE) {
-        targetNumberOfPeople <- 100
+        targetNumberOfPeople <- 150
     }
 
     ## 부트캠프별 정원 변수처리
     if (str_detect(stApp$productName, "AI") == TRUE) {
-        personnelNum <- 60
+        personnelNum <- 120
     } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
         personnelNum <- 45
     } else if (str_detect(stApp$productName, "그로스") == TRUE) {
@@ -305,7 +305,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
     } else if (str_detect(stApp$productName, "소프트웨어") == TRUE) {
         personnelNum <- 120
     } else if (str_detect(stApp$productName, "DevOps") == TRUE) {
-        personnelNum <- 40
+        personnelNum <- 60
     }
 
     slackMsg <- paste0("\n*", stApp$productName, "* ( D+", query_published_product[i, ]$elapsedTime, " / ", "D-", abs(query_published_product[i, ]$remainingTime), " )")
