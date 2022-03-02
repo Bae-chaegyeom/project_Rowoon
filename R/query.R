@@ -100,12 +100,10 @@ for (i in 1:nrow(query_published_product)) {
     # query_published_product[i, ]$elapsedTime
     # query_published_product[i, ]$remainingTime
     ## productId가지고 누적 지원 수 가져오는 쿼리
-    ### a.status를 사용하지 않게 되어 a.applyingStatus를 통해 지원중 인원 쿼리
     q1 <- paste("SELECT a.productName, count(user.id) as startAppCount FROM application a
 JOIN user ON user.id = a.userId
 WHERE a.productId =", pdi, "AND user.role <> 'admin'
-AND user.email NOT LIKE '%@codestates.com'
-AND a.applyingStatus = 'applying'")
+AND user.email NOT LIKE '%@codestates.com'")
 
     stApp <- dbGetQuery(con, q1)
     ## 테스트를 위해 열어둔 상품 확인 q1 쿼리시 크루를 제외하기때문에 application에서 null값이 반환되며 R에서는 NA로 표기됨
@@ -171,7 +169,6 @@ AND a.applyingStatus = 'submitted'")
 JOIN user ON user.id = a.userId
 WHERE a.productId =", pdi, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
-AND a.applyingStatus = 'applying'
 AND TIMESTAMP(a.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 
     yesStartApp <- dbGetQuery(con, q4)
