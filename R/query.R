@@ -65,7 +65,7 @@ AND DATE_ADD(date(p.applyStartDate), INTERVAL 9 HOUR) < DATE_ADD(now(), INTERVAL
 AND p.name NOT LIKE '%test%'
 AND p.name NOT LIKE '%테스트%'
 AND p.name NOT LIKE '%copy%'
-AND p.name NOT LIKE '%결제%',
+AND p.name NOT LIKE '%결제%'
 AND p.name NOT LIKE '%빗썸%'"
 )
 
