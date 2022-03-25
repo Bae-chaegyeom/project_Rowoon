@@ -287,7 +287,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
     if (str_detect(stApp$productName, "AI") == TRUE) {
         targetNumberOfPeople <- 360
     } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
-        targetNumberOfPeople <- 113
+        targetNumberOfPeople <- 150
     } else if (str_detect(stApp$productName, "그로스") == TRUE) {
         targetNumberOfPeople <- 113
     } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
@@ -304,7 +304,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
     if (str_detect(stApp$productName, "AI") == TRUE) {
         personnelNum <- 120
     } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
-        personnelNum <- 45
+        personnelNum <- 50
     } else if (str_detect(stApp$productName, "그로스") == TRUE) {
         personnelNum <- 45
     } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
