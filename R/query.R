@@ -59,6 +59,7 @@ currentHour <- as.POSIXlt(nowTime)$hour
 query_published_product <- dbGetQuery(
     con,
     "SELECT p.id, p.name, p.applyStartDate, DATEDIFF(now(),date(p.applyStartDate)) as elapsedTime , DATEDIFF(now(),date(p.applyEndDate)) as remainingTime FROM product p
+JOIN application a ON a.productId = p.id 
 WHERE DATEDIFF(DATE_ADD(now(), INTERVAL 9 HOUR) ,DATE_ADD(date(p.applyEndDate), INTERVAL 9 HOUR)) <= 0
 AND DATE_ADD(date(p.serviceStartDate), INTERVAL 9 HOUR) > DATE_ADD(now(), INTERVAL 9 HOUR)
 AND DATE_ADD(date(p.applyStartDate), INTERVAL 9 HOUR) < DATE_ADD(now(), INTERVAL 9 HOUR)
@@ -66,7 +67,9 @@ AND p.name NOT LIKE '%test%'
 AND p.name NOT LIKE '%테스트%'
 AND p.name NOT LIKE '%copy%'
 AND p.name NOT LIKE '%결제%'
-AND p.name NOT LIKE '%빗썸%'"
+AND p.name NOT LIKE '%빗썸%'
+AND a.paymentType = 'gov_funding'
+GROUP BY p.name "
 )
 
 ## 공사중 메세지를 위한 변수
