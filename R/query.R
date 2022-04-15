@@ -107,7 +107,8 @@ for (i in 1:nrow(query_published_product)) {
     q1 <- paste("SELECT a.productName, count(user.id) as startAppCount FROM application a
 JOIN user ON user.id = a.userId
 WHERE a.productId =", pdi, "AND user.role <> 'admin'
-AND user.email NOT LIKE '%@codestates.com'")
+AND user.email NOT LIKE '%@codestates.com'
+AND DATE_FORMAT(DATE_ADD(a.createdAt, INTERVAL 9 HOUR), '%Y-%m-%d %H:%i') < DATE_FORMAT(NOW(), '%Y-%m-%d 10:00')")
 
     stApp <- dbGetQuery(con, q1)
     ## 테스트를 위해 열어둔 상품 확인 q1 쿼리시 크루를 제외하기때문에 application에서 null값이 반환되며 R에서는 NA로 표기됨
@@ -158,10 +159,13 @@ WHERE as2.productId =", pdi)
 
     ## productId와 applyingStatus = submitted 조건으로 지원완료인원 쿼리
     q3 <- paste("SELECT COUNT(DISTINCT user.id) as compAppCount FROM application a
+JOIN application_step_submission ass ON ass.applicationId = a.id
+JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
-WHERE a.productId =", pdi, "AND user.role <> 'admin'
+WHERE a.productId =", pdi, "AND as2.order =", laOrder ,"AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
-AND a.applyingStatus = 'submitted'")
+AND a.applyingStatus = 'submitted'
+AND DATE_FORMAT(DATE_ADD(ass.createdAt, INTERVAL 9 HOUR), '%Y-%m-%d %H:%i') <  DATE_FORMAT(NOW(), '%Y-%m-%d 10:00')")
 
     comApp <- dbGetQuery(con, q3)
 
@@ -173,7 +177,7 @@ AND a.applyingStatus = 'submitted'")
 JOIN user ON user.id = a.userId
 WHERE a.productId =", pdi, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
-AND TIMESTAMP(a.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
+AND DATE_FORMAT(DATE_ADD(a.createdAt, INTERVAL 9 HOUR), '%Y-%m-%d %H:%i') < DATE_FORMAT(DATE_SUB(now(), INTERVAL 1 DAY), '%Y-%m-%d 10:00')")
 
     yesStartApp <- dbGetQuery(con, q4)
     ## 어제 지원 시작 인원
@@ -184,10 +188,10 @@ AND TIMESTAMP(a.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
-WHERE a.productId =", pdi, "AND user.role <> 'admin'
+WHERE a.productId =", pdi, "AND as2.order =", laOrder, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
 AND a.applyingStatus = 'submitted'
-AND TIMESTAMP(ass.createdAt) <= TIMESTAMP(now() - INTERVAL 1 DAY)")
+AND DATE_FORMAT(DATE_ADD(ass.createdAt, INTERVAL 9 HOUR), '%Y-%m-%d %H:%i') <  DATE_FORMAT(DATE_SUB(NOW(), INTERVAL 1 DAY), '%Y-%m-%d 10:00')")
 
     yesComApp <- dbGetQuery(con, q5)
     ## 어제 지원 완료 인원
