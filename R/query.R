@@ -59,7 +59,7 @@ currentHour <- as.POSIXlt(nowTime)$hour
 query_published_product <- dbGetQuery(
     con,
     "SELECT p.id, p.name, p.applyStartDate, DATEDIFF(now(),date(p.applyStartDate)) as elapsedTime , DATEDIFF(now(),date(p.applyEndDate)) as remainingTime FROM product p
-JOIN application a ON a.productId = p.id 
+JOIN application a ON a.productId = p.id
 WHERE DATEDIFF(DATE_ADD(now(), INTERVAL 9 HOUR) ,DATE_ADD(date(p.applyEndDate), INTERVAL 9 HOUR)) <= 0
 AND DATE_ADD(date(p.serviceStartDate), INTERVAL 9 HOUR) > DATE_ADD(now(), INTERVAL 9 HOUR)
 AND DATE_ADD(date(p.applyStartDate), INTERVAL 9 HOUR) < DATE_ADD(now(), INTERVAL 9 HOUR)
@@ -162,7 +162,7 @@ WHERE as2.productId =", pdi)
 JOIN application_step_submission ass ON ass.applicationId = a.id
 JOIN application_step as2 ON ass.applicationStepId = as2.id
 JOIN user ON user.id = a.userId
-WHERE a.productId =", pdi, "AND as2.order =", laOrder ,"AND user.role <> 'admin'
+WHERE a.productId =", pdi, "AND as2.order =", laOrder, "AND user.role <> 'admin'
 AND user.email NOT LIKE '%@codestates.com'
 AND a.applyingStatus = 'submitted'
 AND DATE_FORMAT(DATE_ADD(ass.createdAt, INTERVAL 9 HOUR), '%Y-%m-%d %H:%i') <  DATE_FORMAT(NOW(), '%Y-%m-%d 10:00')")
@@ -296,7 +296,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
     } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
         targetNumberOfPeople <- 150
     } else if (str_detect(stApp$productName, "그로스") == TRUE) {
-        targetNumberOfPeople <- 113
+        targetNumberOfPeople <- 200
     } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
         targetNumberOfPeople <- 113
     } else if (str_detect(stApp$productName, "프론트엔드") == TRUE) {
@@ -313,7 +313,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
     } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
         personnelNum <- 50
     } else if (str_detect(stApp$productName, "그로스") == TRUE) {
-        personnelNum <- 45
+        personnelNum <- 80
     } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
         personnelNum <- 45
     } else if (str_detect(stApp$productName, "프론트엔드") == TRUE) {
