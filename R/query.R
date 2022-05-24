@@ -450,9 +450,9 @@ if (Dev == FALSE) {
     )
 }
 
-underConstructionMsg <- paste0("지원자 양&질 실험을 통해 수강생의 퀄리티를 유지하기 위해 3.3배수의 모집이 필요한 것으로 파악되어 모집목표 인원을 3.3배수로 변경하여 표시합니다. :pray:")
+chunsickNoti <- paste0("지원자 양&질 실험을 통해 수강생의 퀄리티를 유지하기 위해 3.3배수의 모집이 필요한 것으로 파악되어 모집목표 인원을 3.3배수로 변경하여 표시합니다. :pray:")
     slackr_msg(
-        txt = underConstructionMsg,
+        txt = chunsickNoti,
         channel = "#team-admission",
         username = "춘식이",
         token = Sys.getenv("SLACK_TOKEN"),
