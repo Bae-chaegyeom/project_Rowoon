@@ -292,19 +292,19 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
 
     ## 부트캠프별 목표인원 변수처리
     if (str_detect(stApp$productName, "AI") == TRUE) {
-        targetNumberOfPeople <- 360
+        targetNumberOfPeople <- 396
     } else if (str_detect(stApp$productName, "프로덕트") == TRUE) {
-        targetNumberOfPeople <- 150
+        targetNumberOfPeople <- 165
     } else if (str_detect(stApp$productName, "그로스") == TRUE) {
-        targetNumberOfPeople <- 200
+        targetNumberOfPeople <- 264
     } else if (str_detect(stApp$productName, "블록체인") == TRUE) {
-        targetNumberOfPeople <- 113
+        targetNumberOfPeople <- 149
     } else if (str_detect(stApp$productName, "프론트엔드") == TRUE) {
-        targetNumberOfPeople <- 450
+        targetNumberOfPeople <- 462
     } else if (str_detect(stApp$productName, "백엔드") == TRUE) {
-        targetNumberOfPeople <- 450
+        targetNumberOfPeople <- 462
     } else if (str_detect(stApp$productName, "DevOps") == TRUE) {
-        targetNumberOfPeople <- 125
+        targetNumberOfPeople <- 165
     }
 
     ## 부트캠프별 정원 변수처리
@@ -449,3 +449,13 @@ if (Dev == FALSE) {
         reply_broadcast = FALSE,
     )
 }
+
+underConstructionMsg <- paste0("지원자 양&질 실험을 통해 수강생의 퀄리티를 유지하기 위해 3.3배수의 모집이 필요한 것으로 파악되어 모집목표 인원을 3.3배수로 변경하여 표시합니다. :pray:")
+    slackr_msg(
+        txt = underConstructionMsg,
+        channel = "#team-admission",
+        username = "춘식이",
+        token = Sys.getenv("SLACK_TOKEN"),
+        thread_ts = NULL,
+        reply_broadcast = FALSE,
+    )
