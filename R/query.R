@@ -304,7 +304,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
     } else if (str_detect(stApp$productName, "백엔드") == TRUE) {
         targetNumberOfPeople <- 450
     } else if (str_detect(stApp$productName, "DevOps") == TRUE) {
-        targetNumberOfPeople <- 150
+        targetNumberOfPeople <- 125
     }
 
     ## 부트캠프별 정원 변수처리
@@ -321,7 +321,7 @@ AND user.email NOT LIKE '%@codestates.com' GROUP BY user.id) as bounce")
     } else if (str_detect(stApp$productName, "백엔드") == TRUE) {
         personnelNum <- 140
     } else if (str_detect(stApp$productName, "DevOps") == TRUE) {
-        personnelNum <- 60
+        personnelNum <- 50
     }
 
     slackMsg <- paste0("\n*", stApp$productName, "* ( D+", query_published_product[i, ]$elapsedTime, " / ", "D-", abs(query_published_product[i, ]$remainingTime), " )")
